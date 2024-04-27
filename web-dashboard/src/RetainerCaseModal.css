@@ -1,0 +1,76 @@
+.pagedesign{
+    background-color: black;
+    width: 40%;
+    height: 65%;
+    border: 1px solid #f59e0b;
+    border-radius: 11px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagedesign2{
+    background-color: black;
+    width: 35%;
+    height: 50%;
+    border: 1px solid #f59e0b;
+    border-radius: 11px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.closeicon{
+    font-size: 30px;
+    padding: 5px 10px 5px 10px;
+    margin: auto;
+    border-radius: 0 10px 0 0;
+}
+
+.closeicon:hover{
+    background-color: #cc3333;
+}
+
+.addlabel{
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.accntype{
+    font-weight: 500;
+}
+.labelinput{
+    font-size: 17px;
+}
+
+.savebutton{
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: -20px;
+}
+
+/*.formbox {
+    border: 1px solid #f59e0b;
+    border-radius: 9px;
+    padding: 20px 0 20px 0;
+    background-color: rgba(255, 255, 255, 0.2);
+}*/
+
+.idbox{
+    width: 100%;
+}
+.txtbox{
+    width: 100%;
+}
+.datebox{
+    width: 100%;
+}
+.filebox{
+    width: 100%;
+}
+.txtbox2{
+    width: 175%;
+}
+.datebox2{
+    width: 100%;
+}
