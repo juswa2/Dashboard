@@ -7,9 +7,9 @@ import logo from './QLOGO.png';
 import usericon from './prof.gif';
 import './App.css';
 
-function ClientPage(props) {
+function RetainerPage(props) {
   const { id } = useParams();
-  const [clientCases, setClientCases] = useState([]);
+  const [retainerCases, setRetainerCases] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const navigate = useNavigate();
@@ -66,20 +66,20 @@ function ClientPage(props) {
         .then(res => {
             if (res.data.valid) {
               setUserData(res.data.userData);
-                axios.get(`http://localhost:8081/clientcases/${res.data.userData.id}`)
+                axios.get(`http://localhost:8081/retainercases/${res.data.userData.id}`)
                     .then(res => {
                         // Fetch status data for each client case
-                        const promises = res.data.map(clientCase => (
-                          axios.get(`http://localhost:8081/clientcasedata/${clientCase.id}`)
+                        const promises = res.data.map(retainerCase => (
+                          axios.get(`http://localhost:8081/retainercasedata/${retainerCase.id}`)
                         ));
                         Promise.all(promises)
                           .then(response => {
                             // Combine client case data with their respective status data
-                            const combinedData = res.data.map((clientCase, index) => ({
-                              ...clientCase,
+                            const combinedData = res.data.map((retainerCase, index) => ({
+                              ...retainerCase,
                               statusData: response[index].data.statusData
                             }));
-                            setClientCases(combinedData);
+                            setRetainerCases(combinedData);
                           })
                           .catch(err => {
                             console.error('Error fetching client case info:', err);
@@ -114,7 +114,7 @@ function ClientPage(props) {
               />
               {showDropdown && (
                 <div className="absolute right-0 mt-4 w-30 bg-white border border-gray-300 rounded shadow">
-                  <Link to='/profileclient' className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200">
+                  <Link to='/profileretainer' className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200">
                     <FontAwesomeIcon icon={faUserCircle} className="mr-2" />
                     Profile
                   </Link>
@@ -134,26 +134,26 @@ function ClientPage(props) {
           </div>
         </div>
 
-        {clientCases.length > 0 ? (
-          clientCases.map((clientCase, index) => (
+        {retainerCases.length > 0 ? (
+          retainerCases.map((retainerCase, index) => (
             <div className="divcase" key={index}>
               <div className="casebox">
                 <div className="casetitle">
-                  <p className="casename">{clientCase.case_title}</p>
+                  <p className="casename">{retainerCase.case_title}</p>
                   <div className="status-tracker relative" style={{ marginLeft: "10%" }}>
                     <div className="status-item" style={{ fontSize: "18px", lineHeight: "3" }}>
-                      <div style={{ float: "left" }}>{clientCase.client_status}</div>
-                      <div style={{ float: "right" }}>{formatDate(clientCase.date)}</div>
+                      <div style={{ float: "left" }}>{retainerCase.retainer_status}</div>
+                      <div style={{ float: "right" }}>{formatDate(retainerCase.date)}</div>
                       <br />
-                      {clientCase.client_file && (
+                      {retainerCase.retainer_file && (
                         <div style={{ marginTop: "-30px", fontSize: "15px", float: "right" }}>
-                          <button onClick={() => handleFileDownload(clientCase.client_file)} style={{ color: "#f59e0b" }} className='sf'>
-                            {clientCase.client_file}
+                          <button onClick={() => handleFileDownload(retainerCase.retainer_file)} style={{ color: "#f59e0b" }} className='sf'>
+                            {retainerCase.retainer_file}
                           </button>
                         </div>
                       )}
                     </div>
-                    {clientCase.statusData && clientCase.statusData.map((status, statusIndex) => (
+                    {retainerCase.statusData && retainerCase.statusData.map((status, statusIndex) => (
                       <div className="status-item" key={statusIndex} style={{ fontSize: "18px", lineHeight: "3" }}>
                         <div style={{ float: "left" }}>{status.status}</div>
                         <div style={{ float: "right", marginLeft: "30px" }}>{formatDate(status.date)} </div>
@@ -193,4 +193,4 @@ function ClientPage(props) {
   );
 }
 
-export default ClientPage;
+export default RetainerPage;

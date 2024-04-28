@@ -357,6 +357,7 @@ app.post('/login', (req, res) => {
             return res.json({error: "Error in login"});
         }
         if(result.length > 0) {
+            req.session.userId = result[0].id;
             req.session.account_type = result[0].account_type;
             req.session.first_name = result[0].first_name;
             req.session.middle_name = result[0].middle_name;
@@ -383,7 +384,7 @@ app.get('/checkSession', (req, res) => {
     if(req.session.account_type) {
         const userData = {
             account_type: req.session.account_type,
-            id: req.session.id,
+            id: req.session.userId,
             first_name: req.session.first_name,
             middle_name: req.session.middle_name,
             last_name: req.session.last_name
@@ -398,6 +399,72 @@ app.get('/logout', (req, res) => {
     req.session.destroy();
     return res.json("success");
 })
+
+app.get('/clientcases/:id', (req, res) => {
+    const accountId = req.params.id;
+
+    const sql = "SELECT * FROM client_case WHERE client_id = ?";
+    db.query(sql, [accountId], (err, result) => {
+        if (err) {
+            console.error("Error fetching client cases:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        return res.json(result);
+    });
+});
+
+app.get('/clientcasedata/:id', (req, res) => {
+    const sql = "SELECT * FROM client_case WHERE id = ?";
+    const id = req.params.id;
+
+    db.query(sql,[id], (err, result) => {
+        if (err) return res.json({ Message: "Error inside server" });
+        
+        const clientCase = result[0];
+        const statusSql = "SELECT * FROM client_statuses WHERE client_case_id = ?";
+        db.query(statusSql, [id], (err, statusResult) => {
+            if (err) {
+                console.error("Error fetching client statuses:", err);
+                return res.json({ Message: "Error inside server" });
+            }
+            clientCase.statusData = statusResult;
+            return res.json(clientCase);
+        });
+    });
+});
+
+app.get('/retainercases/:id', (req, res) => {
+    const accountId = req.params.id;
+
+    const sql = "SELECT * FROM retainer_case WHERE retainer_id = ?";
+    db.query(sql, [accountId], (err, result) => {
+        if (err) {
+            console.error("Error fetching client cases:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        return res.json(result);
+    });
+});
+
+app.get('/retainercasedata/:id', (req, res) => {
+    const sql = "SELECT * FROM retainer_case WHERE id = ?";
+    const id = req.params.id;
+  
+    db.query(sql, [id], (err, result) => {
+      if (err) return res.json({ Message: "Error inside server" });
+  
+      const retainerCase = result[0];
+      const statusSql = "SELECT * FROM retainer_statuses WHERE retainer_case_id = ?";
+      db.query(statusSql, [id], (err, statusResult) => {
+        if (err) {
+          console.error("Error fetching retainer statuses:", err);
+          return res.json({ Message: "Error inside server" });
+        }
+        retainerCase.statusData = statusResult;
+        return res.json(retainerCase);
+      });
+    });
+  });
 
 
 app.use('/files', express.static(path.join(__dirname, 'public', 'files')));

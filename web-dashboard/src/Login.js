@@ -58,6 +58,9 @@ function Login() {
                         } else if (res.data.account_type === 3) {
                             console.log("Navigating to client page");
                             navigate('/clientpage');
+                        } else if (res.data.account_type === 4) {
+                            console.log("Navigating to retainer page");
+                            navigate('/retainerpage');
                         } else {
                         }
                     } else {

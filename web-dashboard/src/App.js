@@ -10,6 +10,7 @@ import EditAccount from "./EditAccount";
 import Login from "./Login";
 import ClientPage from "./ClientPage";
 import ProfileClient from "./ProfileClient";
+import RetainerPage from "./RetainerPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<Login/>}></Route>
         <Route path='/dashboard' element={<Dashboard />}></Route>
         <Route path='/clientpage' element={<ClientPage />}></Route>
+        <Route path='/retainerpage' element={<RetainerPage />}></Route>
         <Route path='/clients' element={<Clients />}></Route>
         <Route path='/retainers' element={<Retainers />}></Route>
         <Route path='/accounts' element={<Accounts />}></Route>

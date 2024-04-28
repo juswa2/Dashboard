@@ -241,7 +241,7 @@ const renderProfilePicture = () => {
               </div>
               <select
   id="accountType"
-  className="accntype shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+  className="accntype selectField shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
   onChange={e =>
     setValues(prevValues => ({
       ...prevValues,
@@ -250,13 +250,13 @@ const renderProfilePicture = () => {
   }
   value={values.account_type}
 >
+  <option value="" disabled>Select Type</option>
+  <option value="1">Admin</option>
+  <option value="2">Staff</option>
+  <option value="3">Client</option>
+  <option value="4">Retainers</option>
+</select>
 
-                     <option value="" disabled>Select Type</option>
-                     <option value="1">Admin</option>
-                     <option value="2">Staff</option>
-                     <option value="3">Client</option>
-                     <option value="4">Retainers</option>
-                </select>
             </div>
             <div className="buttonfunction flex justify-end">
               <Link to={'/accounts'} onClick={handleCancel} className="mr-8 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded">Cancel</Link>

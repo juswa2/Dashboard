@@ -414,6 +414,9 @@ nav{
   font-weight: 600;
   border: 1px solid #f59e0b;
 }
-/*.sf {
-}*/
+
+.selectField {
+  height: 2.5rem;
+}
+
 

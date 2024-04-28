@@ -63,7 +63,7 @@ const AddAccountModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50" style={{zIndex: "15"  }}>
-      <div className="pagedesign bg-white p-7 rounded-lg relative">
+      <div className="pagedesign bg-white p-7 rounded-lg relative" style={{ maxWidth: "900px", width: "90%", transform: "translateX(8%)" }}>
         <FontAwesomeIcon
           icon={faTimes}
           className="closeicon absolute top-0 right-0 m-4 text-white cursor-pointer"
@@ -74,79 +74,78 @@ const AddAccountModal = ({ isOpen, onClose }) => {
         )}
         <h2 className="addlabel text-xl font-semibold mb-4">Add Account</h2>
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-wrap -mx-3 -mb-1">
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="first_name" className="labelinput block text-white text-sm font-bold mb-2">First Name:</label>
+          <div className="flex flex-wrap -mx-3">
+            <div className=" md:w-1/4 px-3 mb-6" style={{width: "250px"}}>
+              <label htmlFor="first_name" className="labelinput block text-white text-sm font-bold mb-1">First Name:</label>
               <input id="firstName" type="text" onChange={e => setValues({ ...values, first_name: e.target.value })} className="capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="middle_name" className="labelinput block text-white text-sm font-bold mb-2">Middle Name:</label>
+            <div className=" md:w-1/4 px-3 mb-6" style={{width: "250px"}}>
+              <label htmlFor="middle_name" className="labelinput block text-white text-sm font-bold mb-1">Middle Name:</label>
               <input id="middleName" type="text" onChange={e => setValues({ ...values, middle_name: e.target.value })} className="capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
-          </div>
-          <div className="flex flex-wrap -mx-3 mb-1">
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="last_name" className="labelinput block text-white text-sm font-bold mb-2">Last Name:</label>
+            <div className=" md:w-1/4 px-3 mb-6" style={{width: "250px"}}>
+              <label htmlFor="last_name" className="labelinput block text-white text-sm font-bold mb-1">Last Name:</label>
               <input id="lastName" type="text" onChange={e => setValues({ ...values, last_name: e.target.value })} className="capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
-            <div className="w-full md:w-1/3 px-3 mb-6">
-              <label htmlFor="suffix" className="labelinput block text-white text-sm font-bold mb-2">Suffix:</label>
+            <div className=" md:w-1/4 px-3 mb-6" style={{width: "90px"}}>
+              <label htmlFor="suffix" className="labelinput block text-white text-sm font-bold mb-1">Suffix:</label>
               <input id="suffix" type="text" onChange={e => setValues({ ...values, suffix: e.target.value })} className="capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
           </div>
-          <div className="flex flex-wrap -mx-3 mb-1">
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="email" className="labelinput block text-white text-sm font-bold mb-2">Email:</label>
+          <div className="flex flex-wrap -mx-3">
+            <div className="w-full md:w-1/3 px-3 mb-6">
+              <label htmlFor="email" className="labelinput block text-white text-sm font-bold mb-1">Email:</label>
               <input id="email" type="email" onChange={e => setValues({ ...values, email: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="pnumber" className="labelinput block text-white text-sm font-bold mb-2">Phone #:</label>
+            <div className="w-full md:w-1/3 px-3 mb-6">
+              <label htmlFor="pnumber" className="labelinput block text-white text-sm font-bold mb-1">Phone #:</label>
               <input id="pnumber" type="telephone" onChange={e => setValues({ ...values, pnumber: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="fb" className="labelinput block text-white text-sm font-bold mb-2">FB Account:</label>
+            <div className="w-full md:w-1/3 px-3 mb-6">
+              <label htmlFor="fb" className="labelinput block text-white text-sm font-bold mb-1">FB Account:</label>
               <input id="fb" type="text" onChange={e => setValues({ ...values, fb: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
           </div>
-          <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="flex flex-wrap -mx-3">
             <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="username" className="labelinput block text-white text-sm font-bold mb-2">Username:</label>
+              <label htmlFor="username" className="labelinput block text-white text-sm font-bold mb-1">Username:</label>
               <input id="username" type="text" onChange={e => setValues({ ...values, username: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
             <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="password" className="labelinput block text-white text-sm font-bold mb-2">Password:</label>
+              <label htmlFor="password" className="labelinput block text-white text-sm font-bold mb-1">Password:</label>
               <input id="password" type="password" onChange={e => setValues({ ...values, password: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
           </div>
-          
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full md:w-1/2 px-3 mb-6">
-              <label htmlFor="accountType" className="labelinput block text-white text-sm font-bold mb-2">Account Type:</label>
+              <label htmlFor="accountType" className="labelinput block text-white text-sm font-bold mb-1">Account Type:</label>
               <select
-  id="accountType"
-  className="accntype shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-  onChange={e => setValues({ ...values, account_type: e.target.value })}
-  value={values.account_type}
->
-  <option value="" disabled>Select Type</option>
-  <option value="1">Admin</option>
-  <option value="2">Staff</option>
-  <option value="3">Client</option>
-  <option value="4">Retainer</option>
-</select>
-
+                id="accountType"
+                className="accntype shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onChange={e => setValues({ ...values, account_type: e.target.value })}
+                value={values.account_type}
+              >
+                <option value="" disabled>Select Type</option>
+                <option value="1">Admin</option>
+                <option value="2">Staff</option>
+                <option value="3">Client</option>
+                <option value="4">Retainer</option>
+              </select>
             </div>
             <div className="w-full md:w-1/2 px-3 mb-6">
-            <label className="labelinput block text-white text-sm font-bold mb-2">Profile Picture:</label>
-            <input type="file" onChange={handlePhoto} className=""/>
+              <label className="labelinput block text-white text-sm font-bold mb-1">Profile Picture:</label>
+              <input type="file" onChange={handlePhoto} className=""/>
             </div>
           </div>
-          
-          {/* Add more input fields for other details */}
-          <button type="submit" onClick={handlePhotoUpload} className="savebutton bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded float-right">
-            <FontAwesomeIcon icon={faCheck} className="mr-2" />
-            Save
-          </button>
+          <div className="flex justify-end">
+            <button type="button" className="cancelbutton bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="savebtn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" style={{height: "40px"}}>
+              <FontAwesomeIcon icon={faCheck} className="mr-2" />
+              Save
+            </button>
+          </div>
         </form>
       </div>
     </div>
