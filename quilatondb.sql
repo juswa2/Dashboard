@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2024 at 03:01 PM
+-- Generation Time: May 20, 2024 at 03:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,9 +32,9 @@ CREATE TABLE `accounts` (
   `first_name` varchar(30) NOT NULL,
   `middle_name` varchar(30) NOT NULL,
   `last_name` varchar(30) NOT NULL,
-  `email` varchar(30) NOT NULL,
-  `pnumber` int(10) NOT NULL,
-  `fb` varchar(30) NOT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `pnumber` varchar(30) DEFAULT NULL,
+  `fb` varchar(30) DEFAULT NULL,
   `username` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,
   `suffix` varchar(30) DEFAULT NULL,
@@ -47,10 +47,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `first_name`, `middle_name`, `last_name`, `email`, `pnumber`, `fb`, `username`, `password`, `suffix`, `account_type`, `image`) VALUES
-(36, 'Jamess', 'Jacks', 'Zacks', 'jamess@gmail.com', 0, '', 'james1', 'james123', NULL, 1, 'image_1713025805749.png'),
-(51, 'retain', '', 'lee', '', 0, '', 'retain', 'retain1234', '', 4, 'image_1713511581864.jpg'),
-(52, 'Reggie', '', 'Macariola', '', 0, '', 'reggie', 'reggie123', '', 3, ''),
-(53, 'Joshua', '', 'Mac', '', 0, '', 'josh', 'josh123', '', 4, '');
+(1, 'Quilaton', 'Law', 'Office', '', '098654375876', '', 'quilaton', 'quilaton1', '', 1, 'image_1716169841763.png');
 
 -- --------------------------------------------------------
 
@@ -63,17 +60,10 @@ CREATE TABLE `client_case` (
   `client_id` int(11) NOT NULL,
   `case_title` varchar(30) NOT NULL,
   `client_status` varchar(30) NOT NULL,
-  `client_file` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL,
+  `client_file` varchar(255) DEFAULT NULL,
+  `date` date NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `client_case`
---
-
-INSERT INTO `client_case` (`id`, `client_id`, `case_title`, `client_status`, `client_file`, `date`, `date_created`) VALUES
-(29, 52, 'Rape', 'active', 'mletter.pdf', '2024-04-19', '2024-04-19 15:43:41');
 
 -- --------------------------------------------------------
 
@@ -85,17 +75,10 @@ CREATE TABLE `client_statuses` (
   `id` int(11) NOT NULL,
   `client_case_id` int(11) NOT NULL,
   `status` varchar(30) NOT NULL,
-  `file` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `date` date NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `client_statuses`
---
-
-INSERT INTO `client_statuses` (`id`, `client_case_id`, `status`, `file`, `date`, `date_created`) VALUES
-(18, 29, 'checking', 'mletter (1).pdf', '2024-04-19', '2024-04-19 15:44:31');
 
 -- --------------------------------------------------------
 
@@ -108,17 +91,10 @@ CREATE TABLE `retainer_case` (
   `retainer_id` int(11) NOT NULL,
   `case_title` varchar(30) NOT NULL,
   `retainer_status` varchar(30) NOT NULL,
-  `retainer_file` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL,
+  `retainer_file` varchar(255) DEFAULT NULL,
+  `date` date NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `retainer_case`
---
-
-INSERT INTO `retainer_case` (`id`, `retainer_id`, `case_title`, `retainer_status`, `retainer_file`, `date`, `date_created`) VALUES
-(9, 51, 'rape', 'active', 'mletter.pdf', '2024-04-19', '2024-04-19 15:27:44');
 
 -- --------------------------------------------------------
 
@@ -130,8 +106,8 @@ CREATE TABLE `retainer_statuses` (
   `id` int(11) NOT NULL,
   `retainer_case_id` int(11) NOT NULL,
   `status` varchar(30) NOT NULL,
-  `file` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `date` date NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -181,31 +157,31 @@ ALTER TABLE `retainer_statuses`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `client_case`
 --
 ALTER TABLE `client_case`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `client_statuses`
 --
 ALTER TABLE `client_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `retainer_case`
 --
 ALTER TABLE `retainer_case`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `retainer_statuses`
 --
 ALTER TABLE `retainer_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faBriefcase, faUsers, faUserCircle, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import logo from './QLOGO.png';
@@ -10,24 +10,25 @@ import useravatar from './ava.gif';
 
 function EditAccount() {
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [activeLink, setActiveLink] = useState('/accounts');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
-  const handleCancel = () => {
-  };
 
-  const handleProfilePictureChange = (event) => {
+  const handlephotoupdate = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePicture(reader.result);
+        setProfilePictureFile(file);
       };
       reader.readAsDataURL(file);
     }
@@ -56,7 +57,8 @@ function EditAccount() {
       })
       .catch(err => console.error(err));
   }, [id]);  
-const renderProfilePicture = () => {
+
+  const renderProfilePicture = () => {
     if (profilePicture) {
       return (
         <div className="flex justify-center">
@@ -71,29 +73,55 @@ const renderProfilePicture = () => {
       );
     }
   };
-  
 
-  const handleUpdate = (event) => {
-    event.preventDefault();
-    console.log("Form values:", values);
-    axios.put(`http://localhost:8081/updateaccount/${id}`, values)
-      .then(res => {
-        console.log(res.data);
-        setSuccessMessage('Data Successfully Updated');
-        setTimeout(() => {
-          setSuccessMessage('');
-          navigate('/accounts');
-          window.location.reload();
-        }, 2000);
-      })
-      .catch(err => console.log(err));
-  };
+const handleUpdate = async (event) => {
+  event.preventDefault();
+  console.log("Form values:", values);
+
+  try {
+    if (profilePictureFile) {
+      const formData = new FormData();
+      formData.append('accountId', id);
+      formData.append('image', profilePictureFile);
+      const uploadResponse = await axios.post(`http://localhost:8081/photoupdate`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      values.image = uploadResponse.data.image;
+    }
+    const response = await axios.put(`http://localhost:8081/updateaccount/${id}`, values);
+    console.log(response.data);
+    setSuccessMessage('Data Successfully Updated');
+    setTimeout(() => {
+      setSuccessMessage('');
+      navigate('/accounts');
+      window.location.reload();
+    }, 2000);
+  } catch (error) {
+    console.error("Error updating account:", error);
+  }
+};
 
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+    setShowDropdown((prevShowDropdown) => !prevShowDropdown);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = () => {
+    setShowDropdown(false);
     setConfirmLogout(true);
   };
 
@@ -111,26 +139,36 @@ const renderProfilePicture = () => {
 
   const [userData, setUserData] = useState(null);
     
-      axios.defaults.withCredentials = true;
-      
-      useEffect(() => {
-        axios.get('http://localhost:8081/session')
-          .then(res => {
-            if (res.data.valid) {
-              console.log("User data from response:", res.data.userData);
-              setUserData(res.data.userData);
-            } else {
-              console.log("Redirecting to login page");
-              navigate('/');
-            }
-          })
-          .catch(err => console.log(err));
-      }, []);
+  axios.defaults.withCredentials = true;
   
+  useEffect(() => {
+    axios.get('http://localhost:8081/session')
+      .then(res => {
+        if (res.data.valid) {
+          console.log("User data from response:", res.data.userData);
+          setUserData(res.data.userData);
+          if (res.data.userData.account_type !== 1) {
+            navigate('/');
+          }
+        } else {
+          console.log("Redirecting to login page");
+          navigate('/');
+        }
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value.replace(/\D/g, '');
+    const truncatedValue = inputValue.slice(0, 11);
+    setValues(prevState => ({ ...prevState, pnumber: truncatedValue }));
+  };
+
+  const handleCancel = () => {
+  };
 
   return (
     <div className="flex h-screen pagescreen">
-      {/* Sidebar */}
       <div className="bg-gray-800 w-64 navbar">
         <div className="flex items-center justify-center h-20 bg-black">
           <img src={logo} className="h-17 w-auto" alt="logo" />
@@ -154,53 +192,53 @@ const renderProfilePicture = () => {
           </Link>
         </nav>
       </div>
-      {/* Main content */}
       <div className="flex-1 overflow-y-auto">
-      <div className="sticky top-0 z-10 bg-black bg-opacity-40" style={{zIndex: "15" }}>
-        <header className="p-5 flex justify-between items-center">
-          <p className="text-xl font-semibold">List of Accounts</p>
-          <div className="flex items-center">
-            {/* User icon with dropdown */}
-            <div className="relative">
-              <img
-                src={usericon}
-                className="usericon text-white text-2xl mr-4 cursor-pointer"
-                alt="User Icon"
-                onClick={toggleDropdown}
-              />
-              {showDropdown && (
-                <div className="absolute right-0 mt-4 w-30 bg-white border border-gray-300 rounded shadow">
-                  <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200">
+        <div className="sticky top-0 z-10 bg-black bg-opacity-40" style={{zIndex: "15" }}>
+          <header className="p-5 flex justify-between items-center">
+            <p className="text-xl font-semibold">Edit Account</p>
+            <div className="flex items-center">
+              <div className="relative" ref={dropdownRef}>
+              {userData && userData.image ? (
+                  <img
+                    src={`http://localhost:8081/uploads/${userData.image}`}
+                    className="usericon text-white text-2xl mr-4 cursor-pointer rounded-full"
+                    alt="User Icon"
+                    onClick={toggleDropdown}
+                  />
+                ) : (
+                  <img
+                    src={usericon}
+                    className="usericon text-white text-2xl mr-4 cursor-pointer rounded-full"
+                    alt="User Icon"
+                    onClick={toggleDropdown}
+                  />
+                )}
+                {showDropdown && (
+                  <div className="absolute right-0 mt-4 w-30 bg-white border border-gray-300 rounded shadow">
+                  <Link to='/profileadmin' className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-300 hover:pl-4 hover:pr-[21px]">
                     <FontAwesomeIcon icon={faUserCircle} className="mr-2" />
                     Profile
+                  </Link>
+                  <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-300" onClick={handleLogout}>
+                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                    Logout
                   </button>
-                  <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                    <FontAwesomeIcon icon={faCog} className="mr-2" />
-                    Settings
-                  </button>
-                  <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100" onClick={handleLogout}>
-                      <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
-                      Logout
-                    </button>
                 </div>
-              )}
+                )}
+              </div>
+              {userData && <p className="mr-5 font-semibold text-s">{userData.first_name} {userData.middle_name} {userData.last_name}</p>}
             </div>
-            {userData && <p className="mr-5 font-semibold text-s">{userData.first_name} {userData.middle_name} {userData.last_name}</p>}
-          </div>
-        </header>
-    </div>
-        {/* Edit form */}
+          </header>
+        </div>
         <div className="p-8">
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
-        )}
-          <h2 className="text-xl font-semibold mb-4">Edit Account</h2>
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
           <form className="formedit" onSubmit={handleUpdate}>
             <div className="mb-4 pb1">
-              {/* Profile picture display */}
               {renderProfilePicture()}
               <label htmlFor="profilePicture" className="profilelbl block text-white font-semibold">Profile Picture</label>
-              <input type="file" id="profilePicture" name="profilePicture" className="inputboxprofile mt-1 p-2 border rounded-md" onChange={handleProfilePictureChange} />
+              <input type="file" id="profilePicture" name="profile_picture" className="inputboxprofile mt-1 p-2 border rounded-md" onChange={handlephotoupdate} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="mb-4">
@@ -228,35 +266,27 @@ const renderProfilePicture = () => {
                 <input type="text" id="email" name="email" value={values.email} onChange={e => setValues({...values, email: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
               </div>
               <div className="mb-4">
-                <label htmlFor="pnumber" className="block text-white font-semibold">Phone #:</label>
-                <input type="telephone" id="pnumber" name="pnumber" value={values.pnumber} onChange={e => setValues({...values, pnumber: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="pnumber" className="block text-white font-semibold">Phone Number:</label>
+                <input type="telephone" id="pnumber" name="pnumber" value={values.pnumber} onChange={handleChange} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
               </div>
               <div className="mb-4">
-                <label htmlFor="fb" className="block text-white font-semibold">FB Account:</label>
+                <label htmlFor="fb" className="block text-white font-semibold">Facebook Account:</label>
                 <input type="text" id="fb" name="fb" value={values.fb} onChange={e => setValues({...values, fb: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
               </div>
               <div className="mb-4">
                 <label htmlFor="password" className="block text-white font-semibold">Password:</label>
                 <input type="password" id="password" name="password" value={values.password} onChange={e => setValues({...values, password: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
               </div>
-              <select
-  id="accountType"
-  className="accntype selectField shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-  onChange={e =>
-    setValues(prevValues => ({
-      ...prevValues,
-      account_type: e.target.value
-    }))
-  }
-  value={values.account_type}
->
-  <option value="" disabled>Select Type</option>
-  <option value="1">Admin</option>
-  <option value="2">Staff</option>
-  <option value="3">Client</option>
-  <option value="4">Retainers</option>
-</select>
-
+              <div className="mb-4">
+                <label htmlFor="password" className="block text-white font-semibold mb-1">Account Type:</label>
+                <select id="accountType" className="accntype selectField shadow appearance-none border rounded w-[75%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onChange={e => setValues(prevValues => ({ ...prevValues, account_type: e.target.value }))} value={values.account_type}>
+                  <option value="" disabled>Select Type</option>
+                  <option value="1">Admin</option>
+                  {/*<option value="2">Staff</option>*/}
+                  <option value="3">Client</option>
+                  <option value="4">Retainers</option>
+                </select>
+              </div>
             </div>
             <div className="buttonfunction flex justify-end">
               <Link to={'/accounts'} onClick={handleCancel} className="mr-8 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded">Cancel</Link>
@@ -265,13 +295,13 @@ const renderProfilePicture = () => {
           </form>
         </div>
         {confirmLogout && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded shadow-md">
-            <p className="text-black mb-4">Are you sure you want to log out?</p>
-            <div className="flex justify-center">
-              <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleConfirmLogout}>Yes</button>
-              <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded" onClick={handleCancelLogout}>No</button>
-            </div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc-700 border border-amber-500 p-6 rounded shadow-md">
+          <p className="text-white mb-4">Are you sure you want to log out?</p>
+          <div className="flex justify-center">
+            <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 w-[50%] mr-3 rounded" onClick={handleConfirmLogout}>Yes</button>
+            <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 w-[50%] rounded" onClick={handleCancelLogout}>No</button>
           </div>
+        </div>
         )}
       </div>
     </div>

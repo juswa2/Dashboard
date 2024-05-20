@@ -30,7 +30,7 @@
   margin-top: -3px;
 }
 
-.text-lg, .dashnumber{
+.text-lg{
   font-size: 25px;
   font-weight: bold;
   color:aliceblue;
@@ -40,6 +40,20 @@
   background-color: black;
   border: 1px solid #f59e0b;
 }
+
+.bar-graph-container {
+  width: 100%;
+  height: 100px; /* Adjust height as needed */
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-graph {
+  width: 100%;
+  background-color: #4caf50; /* Change color as needed */
+}
+
 
 nav{
   font-weight: bold;
@@ -122,8 +136,9 @@ nav{
 
 .clientIcon{
   width: 200px;
-  margin-left: 27px;
-  margin-top: -130px;
+  max-width: 200px;
+  margin-left: auto;
+  margin-top: auto;
   border: 4px solid #f59e0b;
   border-radius: 100%;
 }
@@ -210,9 +225,8 @@ nav{
 }
 
 .profilepic img{
-  width: 70%;
-  margin-left: 15%;
-  margin-top: 5%;
+  margin: auto;
+  margin-top: 20px;
 }
 
 .labelname{
@@ -268,22 +282,51 @@ nav{
   background-color: azure;
 }
 
-.casebox{
+.casebox {
   background-color: rgba(55, 54, 54, 0.7);
   border: 1px solid #f59e0b;
-  width: 30%;
-  height: 500px;
-  border-radius: 15px;
-  margin-left: 4%;
-  margin-right: 3%;
-  margin-top: -60px;
+  width: 80%;
+  height: 510px;
+  border-radius: 5px;
+  overflow-y: auto;
 }
 
-.divcase{
-  margin-top: 8%;
+.casebox::-webkit-scrollbar {
+  width: 5px;
 }
 
-.casetitle{
+.casebox::-webkit-scrollbar-thumb {
+  background-color: #f59e0b;
+  border-radius: 10px;
+  /* Adjust the height and margins to fit from top to bottom */
+  height: calc(100% - 20px); /* Subtract the total margin height from 100% */
+  margin-top: 10px; /* Half of the total margin height */
+  margin-bottom: 10px; /* Half of the total margin height */
+}
+
+.casebox::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.casebox::-webkit-scrollbar-button {
+  display: none;
+}
+
+.divcase {
+  margin-top: 5%;
+  margin-left: 2%;
+  margin-right: -3%;
+  margin-bottom: 1%;
+}
+
+.divcases {
+  margin-top: 5%;
+  margin-left: 5%;
+  margin-right: -8%;
+  margin-bottom: 1%;
+}
+
+.casetitle {
   background-color: white;
   width: 90%;
   height: 25%;
@@ -293,14 +336,42 @@ nav{
   margin-right: auto;
 }
 
-.casename{
-  font-size: 50px;
+.casename {
+  font-size: 20px;
+  text-align: center;
+  color: black;
+  margin-left: 20px;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  overflow-y: auto;
+  white-space: normal;
+  max-height: calc(30px * 4);
+  min-height: calc(29px * 4);
+}
+.casename::-webkit-scrollbar {
+  display: none;
+}
+.casenames::-webkit-scrollbar {
+  display: none;
+}
+
+.casenames {
+  font-size: 1.5vw;
   text-align: center;
   color: black;
   font-weight: 600;
-  padding: 20px 0 20px 0;
-  margin-left: 35px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  white-space: normal;
+  max-height: calc(30px * 4);
+  min-height: calc(27px * 4);
 }
+
 
 .addupdate{
   font-size: 30px;
@@ -371,12 +442,11 @@ nav{
 }
 
 .profilelbl{
-  margin-left: 415px;
+  text-align: center;
 }
 
 .inputboxprofile{
-  width: 30%;
-  margin-left: 310px;
+  margin-left: 38%;
 }
 
 .inputboxedit{
@@ -388,9 +458,15 @@ nav{
 }
 
 .im {
-  height: 150px;
-  width: 150px;
-  margin-left: -130px;
+  height: 300px;
+  max-height: 300px;
+  width: 300px;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  border-radius: 100%;
+  border: 4px solid #f59e0b;
 }
 .pb1{
   margin-left: -150px;

@@ -11,6 +11,8 @@ import Login from "./Login";
 import ClientPage from "./ClientPage";
 import ProfileClient from "./ProfileClient";
 import RetainerPage from "./RetainerPage";
+import ProfileRetainer from "./ProfileRetainer";
+import ProfileAdmin from "./ProfileAdmin";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path='/retainers' element={<Retainers />}></Route>
         <Route path='/accounts' element={<Accounts />}></Route>
         <Route path='/profileclient' element={<ProfileClient />}></Route>
+        <Route path='/profileretainer' element={<ProfileRetainer />}></Route>
+        <Route path='/profileadmin' element={<ProfileAdmin />}></Route>
         <Route path='/retainerinfo/:id' element={<RetainerInfo/>}></Route>
         <Route path='/editaccount/:id' element={<EditAccount/>}></Route>
         <Route path='/clientinfo/:id' element={<ClientInfo />} /></Routes>
