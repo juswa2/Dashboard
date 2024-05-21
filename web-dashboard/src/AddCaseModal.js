@@ -19,19 +19,29 @@ const AddCaseModal = ({ isOpen, onClose, clientId }) => {
     setFile(e.target.files[0]);
   };
 
+  const capitalizeWords = (string) => {
+    return string.replace(/\b\w/g, char => char.toUpperCase());
+  };
+
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const capitalizedValues = {
+      ...values,
+      case_title: capitalizeWords(values.case_title),
+      client_status: capitalizeWords(values.client_status)
+    };
+
     const formData = new FormData();
-    formData.append('case_title', values.case_title);
-    formData.append('client_status', values.client_status);
+    formData.append('case_title', capitalizedValues.case_title);
+    formData.append('client_status', capitalizedValues.client_status);
     formData.append('date', values.date);
     formData.append('client_id', clientId);
     formData.append('client_file', file);
 
-    axios.post('http://localhost:8081/addcase', formData, {
+    axios.post('http://localhost:8081/addcase', formData,{
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -68,12 +78,12 @@ const AddCaseModal = ({ isOpen, onClose, clientId }) => {
           <div className="formbox">
             <div className="flex flex-wrap justify-between mb-5">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label className="labelinput block text-white text-sm font-bold mb-2">Case Title:</label>
-                <input type="text" onChange={e => setValues({ ...values, case_title: e.target.value })} className="txtbox capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" required />
+                <label htmlFor='case_title' className="labelinput block text-white text-sm font-bold mb-2">Case Title:</label>
+                <input id='case_title' type="text" onChange={e => setValues({ ...values, case_title: e.target.value })} className="txtbox capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" required />
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0" style={{marginTop: isPhone ? '-20px' : ''}}>
-                <label className="labelinput block text-white text-sm font-bold mb-2">Status:</label>
-                <input type="text" onChange={e => setValues({ ...values, client_status: e.target.value })} className="txtbox capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" required />
+                <label htmlFor='client_status' className="labelinput block text-white text-sm font-bold mb-2">Status:</label>
+                <input id='client_status' type="text" onChange={e => setValues({ ...values, client_status: e.target.value })} className="txtbox capitalize shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" required />
               </div>
             </div>
             <div className="flex flex-wrap justify-between">

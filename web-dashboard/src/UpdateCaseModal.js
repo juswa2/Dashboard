@@ -21,11 +21,20 @@ const UpdateCaseModal = ({ isOpen, onClose, clientCaseId }) => {
 
   const [successMessage, setSuccessMessage] = useState('');
 
+  const capitalizeWords = (string) => {
+    return string.replace(/\b\w/g, char => char.toUpperCase());
+  };
+
+  const capitalizedValues = {
+    ...values,
+    status: capitalizeWords(values.status)
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('status', values.status);
+    formData.append('status', capitalizedValues.status);
     formData.append('date', values.date);
     formData.append('client_case_id', clientCaseId);
     formData.append('file', file);

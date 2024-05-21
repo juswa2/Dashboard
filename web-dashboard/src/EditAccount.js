@@ -7,6 +7,7 @@ import usericon from './prof.gif';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useravatar from './ava.gif';
+import useIsPhone from './useIsPhone';
 
 function EditAccount() {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -14,6 +15,7 @@ function EditAccount() {
   const [activeLink, setActiveLink] = useState('/accounts');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const isPhone = useIsPhone();
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -61,13 +63,13 @@ function EditAccount() {
   const renderProfilePicture = () => {
     if (profilePicture) {
       return (
-        <div className="flex justify-center">
+        <div className="flex justify-center" style={{marginLeft: isPhone ? '12%' : ''}}>
           <img src={profilePicture} alt="Profile" className="im" />
         </div>
       );
     } else {
       return (
-        <div className="flex justify-center">
+        <div className="flex justify-center" style={{marginLeft: isPhone ? '12%' : ''}}>
           <img src={useravatar} alt="Default Profile" className="im" />
         </div>
       );
@@ -167,9 +169,16 @@ const handleUpdate = async (event) => {
   const handleCancel = () => {
   };
 
+  const getInitials = (firstName, middleName, lastName) => {
+    const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : '';
+    const middleInitial = middleName ? middleName.charAt(0).toUpperCase() : '';
+    const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : '';
+    return `${firstInitial}${middleInitial}${lastInitial}`;
+  };
+
   return (
-    <div className="flex h-screen pagescreen">
-      <div className="bg-gray-800 w-64 navbar">
+    <div className="flex flex-col md:flex-row h-screen pagescreen">
+      <div className="bg-gray-800 w-full md:w-64 navbar md:flex flex-col hidden">
         <div className="flex items-center justify-center h-20 bg-black">
           <img src={logo} className="h-17 w-auto" alt="logo" />
         </div>
@@ -192,9 +201,27 @@ const handleUpdate = async (event) => {
           </Link>
         </nav>
       </div>
+      <div className="md:hidden bg-gray-800 w-full fixed bottom-0 left-0 z-20 flex items-center justify-between">
+        <Link to='/dashboard' onClick={() => handleLinkClick('/dashboard')} className={`flex flex-col items-center py-5 px-10 ${activeLink === '/dashboard' ? 'bg-gray-700' : ''}`}>
+          <FontAwesomeIcon icon={faHome} className="text-white" />
+          <span className="text-white text-xs hidden">Dashboard</span>
+        </Link>
+        <Link to='/clients' onClick={() => handleLinkClick('/clients')} className={`flex flex-col items-center py-5 px-10 ${activeLink === '/clients' ? 'bg-gray-700' : ''}`}>
+          <FontAwesomeIcon icon={faUser} className="text-white" />
+          <span className="text-white text-xs hidden">Clients</span>
+        </Link>
+        <Link to='/retainers' onClick={() => handleLinkClick('/retainers')} className={`flex flex-col items-center py-5 px-10 ${activeLink === '/retainers' ? 'bg-gray-700' : ''}`}>
+          <FontAwesomeIcon icon={faBriefcase} className="text-white" />
+          <span className="text-white text-xs hidden">Retainers</span>
+        </Link>
+        <Link to='/accounts' onClick={() => handleLinkClick('/accounts')} className={`flex flex-col items-center py-5 px-10 ${activeLink === '/accounts' ? 'bg-gray-700' : ''}`}>
+          <FontAwesomeIcon icon={faUsers} className="text-white" />
+          <span className="text-white text-xs hidden">Accounts</span>
+        </Link>
+      </div>
       <div className="flex-1 overflow-y-auto">
         <div className="sticky top-0 z-10 bg-black bg-opacity-40" style={{zIndex: "15" }}>
-          <header className="p-5 flex justify-between items-center">
+          <header className="p-5 flex justify-between items-center" style={{marginBottom: isPhone ? '-5%' : ''}}>
             <p className="text-xl font-semibold">Edit Account</p>
             <div className="flex items-center">
               <div className="relative" ref={dropdownRef}>
@@ -226,7 +253,12 @@ const handleUpdate = async (event) => {
                 </div>
                 )}
               </div>
-              {userData && <p className="mr-5 font-semibold text-s">{userData.first_name} {userData.middle_name} {userData.last_name}</p>}
+              {userData && (
+                <p className="mr-5 font-semibold text-s hidden md:block">{userData.first_name} {userData.middle_name} {userData.last_name}</p>
+              )}
+              {userData && (
+                <p className="mr-5 font-semibold text-s block md:hidden">{getInitials(userData.first_name, userData.middle_name, userData.last_name)}</p>
+              )}
             </div>
           </header>
         </div>
@@ -237,49 +269,49 @@ const handleUpdate = async (event) => {
           <form className="formedit" onSubmit={handleUpdate}>
             <div className="mb-4 pb1">
               {renderProfilePicture()}
-              <label htmlFor="profilePicture" className="profilelbl block text-white font-semibold">Profile Picture</label>
-              <input type="file" id="profilePicture" name="profile_picture" className="inputboxprofile mt-1 p-2 border rounded-md" onChange={handlephotoupdate} />
+              <label htmlFor="profilePicture" className="profilelbl block text-white font-semibold" style={{marginRight: isPhone ? '10%' : 'auto', marginLeft: isPhone ? '20%' : 'auto' }}>Profile Picture</label>
+              <input type="file" id="profilePicture" name="profile_picture" className="inputboxprofile mt-1 p-2 bg-white text-black border rounded-md" onChange={handlephotoupdate} style={{width: isPhone ? '50%' : 'auto', marginRight: isPhone ? '10%' : '', marginLeft: isPhone ? '30%' : '39%' }}/>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className={isPhone ? "flex flex-col mb-4" : "grid grid-cols-2 gap-4"}>
               <div className="mb-4">
-                <label htmlFor="first_name" className="block text-white font-semibold">First Name:</label>
-                <input type="text" id="first_name" name="first_name" value={values.first_name} onChange={e => setValues({...values, first_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="first_name" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>First Name:</label>
+                <input type="text" id="first_name" name="first_name" value={values.first_name} onChange={e => setValues({...values, first_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="middleName" className="block text-white font-semibold">Middle Name:</label>
-                <input type="text" id="middleName" name="middleName" value={values.middle_name} onChange={e => setValues({...values, middle_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="middleName" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Middle Name:</label>
+                <input type="text" id="middleName" name="middleName" value={values.middle_name} onChange={e => setValues({...values, middle_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="lastName" className="block text-white font-semibold">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" value={values.last_name} onChange={e => setValues({...values, last_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="lastName" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Last Name:</label>
+                <input type="text" id="lastName" name="lastName" value={values.last_name} onChange={e => setValues({...values, last_name: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="suffix" className="block text-white font-semibold">Suffix:</label>
-                <input type="text" id="suffix" name="suffix" value={values.suffix} onChange={e => setValues({...values, suffix: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="suffix" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Suffix:</label>
+                <input type="text" id="suffix" name="suffix" value={values.suffix} onChange={e => setValues({...values, suffix: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="username" className="block text-white font-semibold">Username:</label>
-                <input type="text" id="username" name="username" value={values.username} onChange={e => setValues({...values, username: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="username" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Username:</label>
+                <input type="text" id="username" name="username" value={values.username} onChange={e => setValues({...values, username: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-white font-semibold">Email:</label>
-                <input type="text" id="email" name="email" value={values.email} onChange={e => setValues({...values, email: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="email" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Email:</label>
+                <input type="text" id="email" name="email" value={values.email} onChange={e => setValues({...values, email: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="pnumber" className="block text-white font-semibold">Phone Number:</label>
-                <input type="telephone" id="pnumber" name="pnumber" value={values.pnumber} onChange={handleChange} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="pnumber" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Phone Number:</label>
+                <input type="telephone" id="pnumber" name="pnumber" value={values.pnumber} onChange={handleChange} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="fb" className="block text-white font-semibold">Facebook Account:</label>
-                <input type="text" id="fb" name="fb" value={values.fb} onChange={e => setValues({...values, fb: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="fb" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Facebook Account:</label>
+                <input type="text" id="fb" name="fb" value={values.fb} onChange={e => setValues({...values, fb: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="password" className="block text-white font-semibold">Password:</label>
-                <input type="password" id="password" name="password" value={values.password} onChange={e => setValues({...values, password: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black" />
+                <label htmlFor="password" className="block text-white font-semibold" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Password:</label>
+                <input type="password" id="password" name="password" value={values.password} onChange={e => setValues({...values, password: e.target.value})} className="inputboxedit mt-1 p-2 border rounded-md w-full text-black"  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} />
               </div>
               <div className="mb-4">
-                <label htmlFor="password" className="block text-white font-semibold mb-1">Account Type:</label>
-                <select id="accountType" className="accntype selectField shadow appearance-none border rounded w-[75%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onChange={e => setValues(prevValues => ({ ...prevValues, account_type: e.target.value }))} value={values.account_type}>
+                <label htmlFor="password" className="block text-white font-semibold mb-1" style={{marginLeft: isPhone ? '-20%' : 'auto' }}>Account Type:</label>
+                <select id="accountType" className="accntype selectField shadow appearance-none border rounded w-[75%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onChange={e => setValues(prevValues => ({ ...prevValues, account_type: e.target.value }))} value={values.account_type}  style={{width: isPhone ? '100%' : '75%', marginLeft: isPhone ? '-20%' : ''}} >
                   <option value="" disabled>Select Type</option>
                   <option value="1">Admin</option>
                   {/*<option value="2">Staff</option>*/}
@@ -288,7 +320,7 @@ const handleUpdate = async (event) => {
                 </select>
               </div>
             </div>
-            <div className="buttonfunction flex justify-end">
+            <div className={isPhone ? "buttonfunction ml-[-25%] flex justify-center" : "buttonfunction flex justify-end"} style={{marginBottom: isPhone ? '20%' : ''}}>
               <Link to={'/accounts'} onClick={handleCancel} className="mr-8 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded">Cancel</Link>
               <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">Update</button>
             </div>

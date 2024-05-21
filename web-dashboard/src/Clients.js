@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faBriefcase, faUsers, faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faBriefcase, faUsers, faUserCircle, faSignOutAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import logo from './QLOGO.png';
 import useravatar from './ava.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import usericon from './prof.gif';
 import useIsPhone from './useIsPhone';
+import AddAccountModal from './AddAccountModal';
 
 function Clients() {
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmLogout, setConfirmLogout] = useState(false);
   const navigate = useNavigate();
@@ -17,6 +19,9 @@ function Clients() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeLink, setActiveLink] = useState('/clients');
   const isPhone = useIsPhone();
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     axios.get('http://localhost:8081/')
@@ -189,19 +194,38 @@ function Clients() {
             </div>
           </header>
         </div>
-        <br />
-        <br />
-        <div className="flex-1" style={{marginTop: isPhone ? '' : '-3%'}}>
-          <div className={`p-1 mt-4 flex ${isPhone ? 'justify-center' : 'justify-start'} ml-${isPhone ? '0' : '[4%]'}`}>
-            <input 
-              type="text" 
-              placeholder="Search..." 
-              className="text-black searchbar px-10 py-2 border rounded" style={{marginLeft: isPhone ? '0' : '5%'}}
-              value={searchQuery}
-              onChange={handleSearch}
-            />
+        <div className="mt-4 flex justify-between items-center">
+      <div className="flex-1 ml-10">
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          className="text-black searchbar px-10 py-2 border rounded" 
+          value={searchQuery}
+          onChange={handleSearch}
+          style={{ width: isPhone ? '100%' : 'auto' }}
+        />
+      </div>
+      <div className="ml-10 mr-10">
+        <button
+          onClick={openModal}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+          style={{
+            width: isPhone ? '100%' : 'auto',
+            fontSize: isPhone ? '15px' : 'inherit',
+            height: isPhone ? '100%' : 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            <span>{isPhone ? 'Add' : 'Add Account'}</span>
           </div>
-        </div>
+        </button>
+        <AddAccountModal isOpen={isModalOpen} onClose={closeModal} />
+      </div>
+    </div>
         <div className="mt-[12%] flex flex-wrap justify-start" style={{ display: isPhone ? 'grid': '', gridTemplateColumns: isPhone ? 'repeat(2, 1fr)' : 'auto', marginBottom: isPhone ? '50px' : ''}}>
           {filteredData.map((accounts, index) => (
             <Link to={`/clientinfo/${accounts.id}`} key={index} className="clientLink">

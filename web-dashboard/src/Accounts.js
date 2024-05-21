@@ -111,18 +111,28 @@ function Accounts() {
       direction = 'desc';
     }
     setSortConfig({ key: columnKey, direction });
-
+  
     const sortedData = [...data].sort((a, b) => {
-      if (a[columnKey] < b[columnKey]) {
+      let aValue, bValue;
+      if (columnKey === 'name') {
+        aValue = `${a.first_name || ''} ${a.middle_name || ''} ${a.last_name || ''}`.toLowerCase();
+        bValue = `${b.first_name || ''} ${b.middle_name || ''} ${b.last_name || ''}`.toLowerCase();
+      } else {
+        aValue = a[columnKey];
+        bValue = b[columnKey];
+      }
+  
+      if (aValue < bValue) {
         return direction === 'asc' ? -1 : 1;
       }
-      if (a[columnKey] > b[columnKey]) {
+      if (aValue > bValue) {
         return direction === 'asc' ? 1 : -1;
       }
       return 0;
     });
     setData(sortedData);
   };
+  
 
   const handleSearchInput = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -168,7 +178,7 @@ function Accounts() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen pagescreen">
+    <div className="flex flex-col md:flex-row h-screen pagescreen" style={{overflowY: isPhone ? 'scroll' : ''}}>
       <div className="bg-gray-800 w-full md:w-64 navbar md:flex flex-col hidden">
         <div className="flex items-center justify-center h-20 bg-black">
           <img src={logo} className="h-17 w-auto" alt="logo" />
@@ -293,7 +303,7 @@ function Accounts() {
             </div>
           </div>
 
-          <div className="table-container mt-3" style={{marginBottom: isPhone ? '20%' : ''}}>
+          <div className="table-container mt-3" style={{marginBottom: isPhone ? '20%' : '',  height: '650px', overflowY: 'auto' }}>
             <table className="w-full">
               <thead>
                 <tr>

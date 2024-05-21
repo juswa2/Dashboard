@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './RetainerCaseModal.css';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import useIsPhone from './useIsPhone'; // Assuming you have this hook imported
+import useIsPhone from './useIsPhone';
 
 const RetainerCaseModal = ({ isOpen, onClose, retainerId }) => {
   const [file, setFile] = useState(null);
@@ -13,7 +13,7 @@ const RetainerCaseModal = ({ isOpen, onClose, retainerId }) => {
     date: new Date().toISOString().split('T')[0],
   });
 
-  const isPhone = useIsPhone(); // Assuming you have this hook
+  const isPhone = useIsPhone();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -21,12 +21,22 @@ const RetainerCaseModal = ({ isOpen, onClose, retainerId }) => {
 
   const [successMessage, setSuccessMessage] = useState('');
 
+  const capitalizeWords = (string) => {
+    return string.replace(/\b\w/g, char => char.toUpperCase());
+  };
+
+  const capitalizedValues = {
+    ...values,
+    case_title: capitalizeWords(values.case_title),
+    retainer_status: capitalizeWords(values.retainer_status)
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('case_title', values.case_title);
-    formData.append('retainer_status', values.retainer_status);
+    formData.append('case_title', capitalizedValues.case_title);
+    formData.append('retainer_status', capitalizedValues.retainer_status);
     formData.append('date', values.date);
     formData.append('retainer_id', retainerId);
     formData.append('retainer_file', file);
