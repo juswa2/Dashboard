@@ -176,11 +176,13 @@ const handleUpdate = async (event) => {
     return `${firstInitial}${middleInitial}${lastInitial}`;
   };
 
+  const yearToday = new Date().getFullYear();
+
   return (
     <div className="flex flex-col md:flex-row h-screen pagescreen">
       <div className="bg-gray-800 w-full md:w-64 navbar md:flex flex-col hidden">
         <div className="flex items-center justify-center h-20 bg-black">
-          <img src={logo} className="h-17 w-auto" alt="logo" />
+          <img src={logo} className="h-17 w-auto" alt="logo" title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}/>
         </div>
         <nav className="mt-10">
           <Link to='/dashboard' onClick={() => handleLinkClick('/dashboard')} className={`buttonnav1 flex items-center py-5 px-4 ${activeLink === '/' ? 'bg-white text-black' : 'hover:bg-white hover:text-black'}`}>
@@ -199,6 +201,22 @@ const handleUpdate = async (event) => {
             <FontAwesomeIcon icon={faUsers} className="mr-2 sidebaricon" />
             <span className="ml-2 sidebar-label">Accounts</span>
           </Link>
+          {!isPhone && (
+          <footer className="px-1 py-1 text-center mt-[20vw]" style={{ fontSize: '12px', fontWeight: '100' }} title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}>
+          <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="10" 
+              height="10" 
+              fill="white" 
+              viewBox="0 0 512 512"
+            >
+              <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM199.4 312.6c-31.2-31.2-31.2-81.9 0-113.1s81.9-31.2 113.1 0c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9c-50-50-131-50-181 0s-50 131 0 181s131 50 181 0c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0c-31.2 31.2-81.9 31.2-113.1 0z"/>
+            </svg>
+            {yearToday} Copyright: Quilaton Law Office
+          </p>
+        </footer>
+          )}
         </nav>
       </div>
       <div className="md:hidden bg-gray-800 w-full fixed bottom-0 left-0 z-20 flex items-center justify-between">

@@ -208,7 +208,7 @@ function ProfileAdmin() {
             <div className="success-message">{successMessage}</div>
           )}
           <header className="bg-black bg-opacity-40 p-5 flex justify-between items-center" style={{marginTop: isPhone ? '-10%' : '-2%', marginLeft: isPhone ? '-10%' : '-2%', marginRight: isPhone ? '-10%' : '-2%' }}>
-        <img src={logo} className="w-64 h-17" alt="logo" style={{marginRight: isPhone ? '10%' : 'auto' }}/>
+        <img src={logo} className="w-64 h-17" alt="logo" style={{marginRight: isPhone ? '10%' : 'auto' }} title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}/>
         <div className="relative" ref={dropdownRef}>
                 {userData && userData.image ? (
                   <img

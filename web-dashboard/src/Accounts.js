@@ -177,11 +177,13 @@ function Accounts() {
     return `${firstInitial}${middleInitial}${lastInitial}`;
   };
 
+  const yearToday = new Date().getFullYear();
+
   return (
     <div className="flex flex-col md:flex-row h-screen pagescreen" style={{overflowY: isPhone ? 'scroll' : ''}}>
       <div className="bg-gray-800 w-full md:w-64 navbar md:flex flex-col hidden">
         <div className="flex items-center justify-center h-20 bg-black">
-          <img src={logo} className="h-17 w-auto" alt="logo" />
+          <img src={logo} className="h-17 w-auto" alt="logo" title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}/>
         </div>
         <nav className="mt-10">
           <Link to='/dashboard' onClick={() => handleLinkClick('/dashboard')} className={`buttonnav1 flex items-center py-5 px-4 ${activeLink === '/dashboard' ? 'bg-white text-black' : 'hover:bg-gray-300 hover:text-black'}`}>
@@ -200,6 +202,22 @@ function Accounts() {
             <FontAwesomeIcon icon={faUsers} className="mr-2 sidebaricon" />
             <span className="ml-2 sidebar-label">Accounts</span>
           </Link>
+          {!isPhone && (
+          <footer className="px-1 py-1 text-center mt-[20vw]" style={{ fontSize: '12px', fontWeight: '100' }} title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}>
+          <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="10" 
+              height="10" 
+              fill="white" 
+              viewBox="0 0 512 512"
+            >
+              <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM199.4 312.6c-31.2-31.2-31.2-81.9 0-113.1s81.9-31.2 113.1 0c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9c-50-50-131-50-181 0s-50 131 0 181s131 50 181 0c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0c-31.2 31.2-81.9 31.2-113.1 0z"/>
+            </svg>
+            {yearToday} Copyright: Quilaton Law Office
+          </p>
+        </footer>
+          )}
         </nav>
       </div>
       <div className="md:hidden bg-gray-800 w-full fixed bottom-0 left-0 z-20 flex items-center justify-between">
@@ -269,39 +287,37 @@ function Accounts() {
           </header>
         </div>
         <div className="p-8">
-          <div className="mt-4 flex justify-end">
-            <div className="mr-5" style={{ marginRight: 'auto', width: isPhone ? '100%' : '' }}>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchInput}
-                placeholder="Search..."
-                className="px-10 py-2 border rounded text-black"
-                style={{width: isPhone ? '90%' : ''}}
-              />
-            </div>
-            <div>
-            <button
-  onClick={openModal}
-  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-  style={{
-    width: isPhone ? '100%' : '',
-    fontSize: isPhone ? '15px' : '',
-    height: isPhone ? '100%' : '',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: isPhone ? 'center' : 'flex-start'
-  }}
->
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-    <span>{isPhone ? 'Add' : 'Add Account'}</span>
+        <div className="mt-4 flex justify-end items-center mr-[-1px]">
+  <div className="flex items-center space-x-4" style={{ width: isPhone ? '100%' : 'auto' }}>
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={handleSearchInput}
+      placeholder="Search..."
+      className="px-10 py-2 border rounded text-black"
+      style={{ width: isPhone ? '70%' : 'auto' }}
+    />
+    <button
+      onClick={openModal}
+      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-[10.1px] px-4 rounded"
+      style={{
+        width: isPhone ? '30%' : 'auto',
+        fontSize: isPhone ? '15px' : 'inherit',
+        height: isPhone ? '100%' : 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+        <span>{isPhone ? 'Add' : 'Add Account'}</span>
+      </div>
+    </button>
   </div>
-</button>
+  <AddAccountModal isOpen={isModalOpen} onClose={closeModal} />
+</div>
 
-              <AddAccountModal isOpen={isModalOpen} onClose={closeModal} />
-            </div>
-          </div>
 
           <div className="table-container mt-3" style={{marginBottom: isPhone ? '20%' : '',  height: '650px', overflowY: 'auto' }}>
             <table className="w-full">
@@ -349,7 +365,7 @@ function Accounts() {
                       {account.account_type === 3 && 'Client'}
                       {account.account_type === 4 && 'Retainer'}
                     </td>
-                    <td className="border px-4 py-2 text-center" style={{ fontSize: isPhone ? '10px' : '', paddingRight: isPhone ? '4%' : '', paddingLeft: isPhone ? '-4%' : ''}}>
+                    <td className="border px-4 py-2 text-center" style={{ fontSize: isPhone ? '10px' : '', paddingRight: isPhone ? '4%' : '', paddingLeft: isPhone ? '4%' : ''}}>
                       <div style={{ display: isPhone ? 'flex' : 'block', flexDirection: isPhone ? 'row' : 'column', alignItems: isPhone ? 'center' : 'flex-start', justifyContent: isPhone ? 'center' : 'flex-start' }}>
                         <button onClick={() => openViewModal(account)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 mr-2 rounded hover:text-white" style={{ paddingLeft: isPhone ? '5px' : '', paddingRight: isPhone ? '5px' : '' }}>
                           <FontAwesomeIcon icon={faEye} /><span style={{ marginLeft: isPhone ? '0' : '0.5em' }}>{isPhone ? '' : 'View'}</span>

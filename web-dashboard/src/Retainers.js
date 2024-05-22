@@ -7,7 +7,7 @@ import useravatar from './ava.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import usericon from './prof.gif';
 import useIsPhone from './useIsPhone';
-import AddAccountModal from './AddAccountModal';
+import AddRetainerModal from './AddRetainerModal';
 
 function Retainers() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,11 +104,13 @@ function Retainers() {
     return fullName.includes(searchQuery.toLowerCase());
   });
 
+  const yearToday = new Date().getFullYear();
+
   return (
     <div className="flex flex-col md:flex-row h-screen pagescreen">
       <div className="bg-gray-800 w-full md:w-64 navbar md:flex flex-col hidden">
         <div className="flex items-center justify-center h-20 bg-black">
-          <img src={logo} className="h-17 w-auto" alt="logo" />
+          <img src={logo} className="h-17 w-auto" alt="logo" title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}/>
         </div>
         <nav className="mt-10">
           <Link to='/dashboard' onClick={() => handleLinkClick('/dashboard')} className={`buttonnav1 flex items-center py-5 px-4 ${activeLink === '/dashboard' ? 'bg-white text-black' : 'hover:bg-gray-300 hover:text-black'}`}>
@@ -127,6 +129,22 @@ function Retainers() {
             <FontAwesomeIcon icon={faUsers} className="mr-2 sidebaricon" />
             <span className="ml-2 sidebar-label">Accounts</span>
           </Link>
+          {!isPhone && (
+          <footer className="px-1 py-1 text-center mt-[20vw]" style={{ fontSize: '12px', fontWeight: '100' }} title={`Developed by:\nCHMSU Interns 2024\nJoshua Maquimot\nReggie Macariola\nJhelyn Joy Alo\nKriza Maeville Ejurango`}>
+          <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="10" 
+              height="10" 
+              fill="white" 
+              viewBox="0 0 512 512"
+            >
+              <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM199.4 312.6c-31.2-31.2-31.2-81.9 0-113.1s81.9-31.2 113.1 0c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9c-50-50-131-50-181 0s-50 131 0 181s131 50 181 0c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0c-31.2 31.2-81.9 31.2-113.1 0z"/>
+            </svg>
+            {yearToday} Copyright: Quilaton Law Office
+          </p>
+        </footer>
+          )}
         </nav>
       </div>
       <div className="md:hidden bg-gray-800 w-full fixed bottom-0 left-0 z-20 flex items-center justify-between">
@@ -154,7 +172,7 @@ function Retainers() {
               <div className="md:hidden">
                 <img src={logo} className="h-10 w-[80%]" alt="logo" />
               </div>
-              <p className="text-xl font-semibold hidden md:block">List of Clients</p>
+              <p className="text-xl font-semibold hidden md:block">List of Retainers</p>
             </div>
             <div className="flex items-center">
               <div className="relative" ref={dropdownRef}>
@@ -195,38 +213,37 @@ function Retainers() {
             </div>
           </header>
         </div>
-        <div className="mt-4 flex justify-between items-center">
-      <div className="flex-1 ml-10">
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          className="text-black searchbar px-10 py-2 border rounded" 
-          value={searchQuery}
-          onChange={handleSearch}
-          style={{ width: isPhone ? '100%' : 'auto' }}
-        />
+        <div className="mt-4 flex justify-end items-center mr-10">
+  <div className="flex items-center space-x-4">
+    <input 
+      type="text" 
+      placeholder="Search..." 
+      className="text-black searchbar px-10 py-2 border rounded" 
+      value={searchQuery}
+      onChange={handleSearch}
+      style={{ width: isPhone ? '100%' : 'auto' }}
+    />
+    <button
+      onClick={openModal}
+      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+      style={{
+        width: isPhone ? '100%' : 'auto',
+        fontSize: isPhone ? '15px' : 'inherit',
+        height: isPhone ? '100%' : 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+        <span>{isPhone ? 'Add' : 'Add Account'}</span>
       </div>
-      <div className="ml-10 mr-10">
-        <button
-          onClick={openModal}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-          style={{
-            width: isPhone ? '100%' : 'auto',
-            fontSize: isPhone ? '15px' : 'inherit',
-            height: isPhone ? '100%' : 'auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            <span>{isPhone ? 'Add' : 'Add Account'}</span>
-          </div>
-        </button>
-        <AddAccountModal isOpen={isModalOpen} onClose={closeModal} />
-      </div>
-    </div>
+    </button>
+  </div>
+  <AddRetainerModal isOpen={isModalOpen} onClose={closeModal} />
+</div>
+
         <div className="mt-[12%] flex flex-wrap justify-start" style={{ display: isPhone ? 'grid': '', gridTemplateColumns: isPhone ? 'repeat(2, 1fr)' : 'auto', marginBottom: isPhone ? '50px' : ''}}>
           {filteredData.filter(accounts => accounts.account_type === 4).map((accounts, index) => (
             <Link to={`/retainerinfo/${accounts.id}`} key={index} className="clientLink">
